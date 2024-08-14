@@ -27,7 +27,10 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReview(@Valid @RequestBody ReviewInputDto reviewInputDto) {
+    public ResponseEntity<?> createReview(@Valid @RequestBody ReviewInputDto reviewInputDto, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResourceNotFoundException("Something went wrong, Please check the following fields. " + BindingResultHelper.getErrorMessage(bindingResult));
+        }
         ReviewOutputDto createReview = reviewService.createReview(reviewInputDto);
         URI uri = URI.create(
                 ServletUriComponentsBuilder
@@ -61,6 +64,12 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.deleteReviewById(id));
     }
 
+    @PutMapping("/{reviewId}/books/{bookId}")
+    public ResponseEntity<String> addReviewToBook(@PathVariable long reviewId, @PathVariable long bookId) {
+        reviewService.addReviewToBook(reviewId, bookId);
+        return ResponseEntity.ok().body("Done");
+    }
+
     @PutMapping("/{reviewId}/users/{userId}")
     public ResponseEntity<String> addReviewToUser(@PathVariable long reviewId, @PathVariable long userId) {
         reviewService.addReviewToUser(reviewId, userId);
@@ -68,8 +77,8 @@ public class ReviewController {
     }
 
     @PutMapping("/{reviewId}/books/{bookId}/users/{userId}")
-    public ResponseEntity<String> addReviewToBook(@PathVariable long reviewId, @PathVariable long bookId, @PathVariable long userId) {
-        reviewService.addReviewToBook(reviewId, bookId, userId);
+    public ResponseEntity<String> addReviewAndUserToBook(@PathVariable long reviewId, @PathVariable long bookId, @PathVariable long userId) {
+        reviewService.addReviewAndUserToBook(reviewId, bookId, userId);
         return ResponseEntity.ok().body("Done");
     }
 }
