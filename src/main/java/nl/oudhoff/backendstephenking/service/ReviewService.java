@@ -6,8 +6,10 @@ import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.model.Book;
 import nl.oudhoff.backendstephenking.model.Review;
+import nl.oudhoff.backendstephenking.model.User;
 import nl.oudhoff.backendstephenking.repository.BookRepository;
 import nl.oudhoff.backendstephenking.repository.ReviewRepository;
+import nl.oudhoff.backendstephenking.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,12 +21,12 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepo;
     private final BookRepository bookRepo;
+    private final UserRepository userRepo;
 
-
-    public ReviewService(BookRepository bookRepo, ReviewRepository reviewRepo) {
+    public ReviewService(BookRepository bookRepo, ReviewRepository reviewRepo, UserRepository userRepo) {
         this.reviewRepo = reviewRepo;
         this.bookRepo = bookRepo;
-
+        this.userRepo = userRepo;
     }
 
     public ReviewOutputDto createReview(ReviewInputDto reviewInputDto) {
@@ -33,6 +35,10 @@ public class ReviewService {
         ReviewOutputDto reviewOutputDto = ReviewMapper.fromModelToOutputDto(model);
         if (model.getBook() != null) {
             reviewOutputDto.setBookId(model.getBook().getId());
+        } else {
+            if (model.getUser() != null) {
+                reviewOutputDto.setUserId(model.getUser().getId());
+            }
         }
         return reviewOutputDto;
     }
@@ -77,13 +83,30 @@ public class ReviewService {
         }
     }
 
-    public void addReviewToBook(long reviewId, long bookId) {
+    public void addReviewToBook(long reviewId, long bookId, long userId) {
         Optional<Review> r = reviewRepo.findById(reviewId);
         Optional<Book> b = bookRepo.findById(bookId);
-        if (r.isPresent() && b.isPresent()) {
+        Optional<User> u = userRepo.findById(userId);
+
+        if (r.isPresent() && b.isPresent() && u.isPresent()) {
             Review review = r.get();
             Book book = b.get();
+            User user = u.get();
             review.setBook(book);
+            review.setUser(user);
+            reviewRepo.save(review);
+        } else {
+            throw new ResourceNotFoundException("Een van de id's bestaat niet");
+        }
+    }
+
+    public void addReviewToUser(long reviewId, long userId) {
+        Optional<Review> r = reviewRepo.findById(reviewId);
+        Optional<User> u = userRepo.findById(userId);
+        if (r.isPresent() && u.isPresent()) {
+            Review review = r.get();
+            User user = u.get();
+            review.setUser(user);
             reviewRepo.save(review);
         } else {
             throw new ResourceNotFoundException("Een van de id's bestaat niet");
