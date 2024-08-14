@@ -1,8 +1,12 @@
 package nl.oudhoff.backendstephenking.dto.Mapper;
 
-import nl.oudhoff.backendstephenking.dto.InputDto.BookInputDto;
-import nl.oudhoff.backendstephenking.dto.OutputDto.BookOutputDto;
+import nl.oudhoff.backendstephenking.dto.Input.BookInputDto;
+import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
+import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
 import nl.oudhoff.backendstephenking.model.Book;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookMapper {
 
@@ -27,6 +31,10 @@ public class BookMapper {
         bookOutputDto.setReleased(book.getReleased());
         bookOutputDto.setMovieAdaptation(book.getMovieAdaptation());
         bookOutputDto.setDescription(book.getDescription());
+        List<ReviewOutputDto> reviewDtos = book.getListOfReviews().stream()
+                .map(ReviewMapper::fromModelToOutputDto)
+                .collect(Collectors.toList());
+        bookOutputDto.setReviews(reviewDtos);
         return bookOutputDto;
     }
 }

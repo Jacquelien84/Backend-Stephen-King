@@ -26,4 +26,7 @@ public class Book {
     private String movieAdaptation;
     @Column(length = 5000, nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "book")
+    private List<Review> listOfReviews = new ArrayList<>();
 }

@@ -1,8 +1,8 @@
 package nl.oudhoff.backendstephenking.service;
 
-import nl.oudhoff.backendstephenking.dto.InputDto.BookInputDto;
+import nl.oudhoff.backendstephenking.dto.Input.BookInputDto;
 import nl.oudhoff.backendstephenking.dto.Mapper.BookMapper;
-import nl.oudhoff.backendstephenking.dto.OutputDto.BookOutputDto;
+import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.model.Book;
 import nl.oudhoff.backendstephenking.repository.BookRepository;
