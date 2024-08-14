@@ -5,12 +5,13 @@ import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
 import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
 import nl.oudhoff.backendstephenking.model.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookMapper {
 
-    public static Book fromInputDtoToModel(BookInputDto inputDto) {
+    public static Book fromInputDtoToModel (BookInputDto inputDto){
         Book b = new Book();
         b.setId(inputDto.getId());
         b.setTitle(inputDto.getTitle());
@@ -22,7 +23,7 @@ public class BookMapper {
         return b;
     }
 
-    public static BookOutputDto fromModelToOutputDto(Book book) {
+    public static BookOutputDto fromModelToOutputDto (Book book) {
         BookOutputDto bookOutputDto = new BookOutputDto();
         bookOutputDto.setId(book.getId());
         bookOutputDto.setTitle(book.getTitle());
@@ -31,10 +32,19 @@ public class BookMapper {
         bookOutputDto.setReleased(book.getReleased());
         bookOutputDto.setMovieAdaptation(book.getMovieAdaptation());
         bookOutputDto.setDescription(book.getDescription());
+
         List<ReviewOutputDto> reviewDtos = book.getListOfReviews().stream()
                 .map(ReviewMapper::fromModelToOutputDto)
                 .collect(Collectors.toList());
         bookOutputDto.setReviews(reviewDtos);
+
         return bookOutputDto;
+    }
+
+    public static List<BookOutputDto> bookModelListToOutputList(List<Book> books) {
+        List<BookOutputDto> bookOutputDtoList = new ArrayList<>();
+        // lambda
+        books.forEach((book) -> bookOutputDtoList.add(fromModelToOutputDto(book)));
+        return bookOutputDtoList;
     }
 }

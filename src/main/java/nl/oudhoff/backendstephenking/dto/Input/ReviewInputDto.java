@@ -12,4 +12,5 @@ public class ReviewInputDto {
     private String name;
     private LocalDate reviewDate;
     private String reviewText;
+
 }

@@ -5,6 +5,7 @@ import nl.oudhoff.backendstephenking.dto.Input.ReviewInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.helper.BindingResultHelper;
+import nl.oudhoff.backendstephenking.repository.UserRepository;
 import nl.oudhoff.backendstephenking.service.BookService;
 import nl.oudhoff.backendstephenking.service.ReviewService;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +22,12 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    public ReviewController(ReviewService reviewService, BookService bookService) {
+    public ReviewController(ReviewService reviewService, BookService bookService, UserRepository userRepo) {
         this.reviewService = reviewService;
     }
 
     @PostMapping
-    public ResponseEntity<?> createReview(@Valid @RequestBody ReviewInputDto reviewInputDto, BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()) {
-            throw new ResourceNotFoundException("Something went wrong, Please check the following fields. " + BindingResultHelper.getErrorMessage(bindingResult));
-        }
+    public ResponseEntity<?> createReview(@Valid @RequestBody ReviewInputDto reviewInputDto) {
         ReviewOutputDto createReview = reviewService.createReview(reviewInputDto);
         URI uri = URI.create(
                 ServletUriComponentsBuilder
@@ -63,9 +61,16 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.deleteReviewById(id));
     }
 
-    @PutMapping("/{reviewId}/books/{bookId}")
-    public ResponseEntity<String> addReviewToBook(@PathVariable long reviewId, @PathVariable long bookId) {
-        reviewService.addReviewToBook(reviewId, bookId);
+    @PutMapping("/{reviewId}/users/{userId}")
+    public ResponseEntity<String> addReviewToUser(@PathVariable long reviewId, @PathVariable long userId) {
+        reviewService.addReviewToUser(reviewId, userId);
+        return ResponseEntity.ok().body("Done");
+    }
+
+    @PutMapping("/{reviewId}/books/{bookId}/users/{userId}")
+    public ResponseEntity<String> addReviewToBook(@PathVariable long reviewId, @PathVariable long bookId, @PathVariable long userId) {
+        reviewService.addReviewToBook(reviewId, bookId, userId);
         return ResponseEntity.ok().body("Done");
     }
 }
+
