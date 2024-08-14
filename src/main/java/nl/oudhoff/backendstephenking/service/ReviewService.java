@@ -83,17 +83,12 @@ public class ReviewService {
         }
     }
 
-    public void addReviewToBook(long reviewId, long bookId, long userId) {
+    public void addReviewToBook(long reviewId, long bookId) {
         Optional<Review> r = reviewRepo.findById(reviewId);
         Optional<Book> b = bookRepo.findById(bookId);
-        Optional<User> u = userRepo.findById(userId);
-
-        if (r.isPresent() && b.isPresent() && u.isPresent()) {
+        if (r.isPresent() && b.isPresent()) {
             Review review = r.get();
             Book book = b.get();
-            User user = u.get();
-            review.setBook(book);
-            review.setUser(user);
             reviewRepo.save(review);
         } else {
             throw new ResourceNotFoundException("Een van de id's bestaat niet");
@@ -106,6 +101,23 @@ public class ReviewService {
         if (r.isPresent() && u.isPresent()) {
             Review review = r.get();
             User user = u.get();
+            review.setUser(user);
+            reviewRepo.save(review);
+        } else {
+            throw new ResourceNotFoundException("Een van de id's bestaat niet");
+        }
+    }
+
+    public void addReviewAndUserToBook(long reviewId, long bookId, long userId) {
+        Optional<Review> r = reviewRepo.findById(reviewId);
+        Optional<Book> b = bookRepo.findById(bookId);
+        Optional<User> u = userRepo.findById(userId);
+
+        if (r.isPresent() && b.isPresent() && u.isPresent()) {
+            Review review = r.get();
+            Book book = b.get();
+            User user = u.get();
+            review.setBook(book);
             review.setUser(user);
             reviewRepo.save(review);
         } else {
