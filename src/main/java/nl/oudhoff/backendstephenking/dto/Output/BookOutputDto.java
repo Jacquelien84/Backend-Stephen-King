@@ -1,4 +1,4 @@
-package nl.oudhoff.backendstephenking.dto.OutputDto;
+package nl.oudhoff.backendstephenking.dto.Output;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +16,5 @@ public class BookOutputDto {
     private Long released;
     private String movieAdaptation;
     private String description;
+    private List<ReviewOutputDto> reviews;
 }
