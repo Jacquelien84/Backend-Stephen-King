@@ -22,7 +22,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    public ReviewController(ReviewService reviewService, BookService bookService, UserRepository userRepo) {
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 

@@ -30,14 +30,14 @@ public class ReviewService {
     }
 
     public ReviewOutputDto createReview(ReviewInputDto reviewInputDto) {
-        Review model = ReviewMapper.fromInputDtoToModel(reviewInputDto);
-        reviewRepo.save(model);
-        ReviewOutputDto reviewOutputDto = ReviewMapper.fromModelToOutputDto(model);
-        if (model.getBook() != null) {
-            reviewOutputDto.setBookId(model.getBook().getId());
+        Review review = ReviewMapper.fromInputDtoToModel(reviewInputDto);
+        reviewRepo.save(review);
+        ReviewOutputDto reviewOutputDto = ReviewMapper.fromModelToOutputDto(review);
+        if (review.getBook() != null) {
+            reviewOutputDto.setBookId(review.getBook().getId());
         } else {
-            if (model.getUser() != null) {
-                reviewOutputDto.setUserId(model.getUser().getId());
+            if (review.getUser() != null) {
+                reviewOutputDto.setUserId(review.getUser().getId());
             }
         }
         return reviewOutputDto;
