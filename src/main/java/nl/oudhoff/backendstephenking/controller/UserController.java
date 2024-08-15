@@ -25,13 +25,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserInputDto userInputDto) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserInputDto userInputDto, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResourceNotFoundException("Something went wrong, Please check the following fields. " + BindingResultHelper.getErrorMessage(bindingResult));
+        }
         UserOutputDto createUser = userService.createUser(userInputDto);
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
                         .path("/" + userInputDto.getId()).toUriString());
-        return ResponseEntity.created(uri).body("Done");
+
+        return ResponseEntity.created(uri).body(createUser);
     }
 
     @GetMapping

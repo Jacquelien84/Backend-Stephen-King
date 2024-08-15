@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,4 +24,8 @@ public class User {
     //De koppeling tussen user en review
     @OneToMany(mappedBy = "user")
     private List<Review> listOfReviews = new ArrayList<>();
+
+    //De koppeling tussen user en role
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles = new HashSet<>();
 }

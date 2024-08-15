@@ -13,5 +13,6 @@ public class UserOutputDto {
     private String password;
     private String email;
     private List<ReviewOutputDto> reviews;
+    private List<String> roles;
 }
 
