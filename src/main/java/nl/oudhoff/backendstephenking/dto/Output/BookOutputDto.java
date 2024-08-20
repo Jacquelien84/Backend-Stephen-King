@@ -17,5 +17,4 @@ public class BookOutputDto {
     private String movieAdaptation;
     private String description;
     private List<ReviewOutputDto> reviews;
-
 }
