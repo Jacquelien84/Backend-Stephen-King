@@ -75,7 +75,7 @@ class ReviewServiceTest {
         when(reviewRepo.save(any(Review.class))).thenReturn(review1);
 
         // Act
-        ReviewOutputDto reviewOutputDto = reviewService.createReview(reviewInputDto1);
+        ReviewOutputDto review1 = reviewService.createReview(reviewInputDto1);
 
         // Assert
         assertEquals(1L, review1.getId());
@@ -92,7 +92,7 @@ class ReviewServiceTest {
         when(reviewRepo.findById(anyLong())).thenReturn(Optional.of(review2));
 
         // Act
-        ReviewOutputDto reviewOutputDto = reviewService.updateReview(2L, reviewInputDto2);
+        ReviewOutputDto review2 = reviewService.updateReview(2L, reviewInputDto2);
 
         // Assert
         assertEquals(2L, review2.getId());

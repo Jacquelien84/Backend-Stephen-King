@@ -1,6 +1,5 @@
 package nl.oudhoff.backendstephenking.service;
 
-import nl.oudhoff.backendstephenking.dto.Input.RoleInputDto;
 import nl.oudhoff.backendstephenking.dto.Mapper.RoleMapper;
 import nl.oudhoff.backendstephenking.dto.Output.RoleOutputDto;
 import nl.oudhoff.backendstephenking.model.Role;

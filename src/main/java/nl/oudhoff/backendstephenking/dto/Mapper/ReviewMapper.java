@@ -4,7 +4,6 @@ import nl.oudhoff.backendstephenking.dto.Input.ReviewInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
 import nl.oudhoff.backendstephenking.model.Review;
 import nl.oudhoff.backendstephenking.repository.BookRepository;
-import nl.oudhoff.backendstephenking.repository.UserRepository;
 
 public class ReviewMapper {
 

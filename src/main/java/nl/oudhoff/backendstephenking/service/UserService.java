@@ -10,10 +10,8 @@ import nl.oudhoff.backendstephenking.repository.RoleRepository;
 import nl.oudhoff.backendstephenking.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -34,14 +32,11 @@ public class UserService {
         Set<Role> userRoles = user.getRoles();
         for (String rolename : userInputDto.getRoles()) {
             Optional<Role> or = roleRepo.findById("ROLE_" + rolename);
-            if (or.isPresent()) {
-                userRoles.add(or.get());
-            }
+            or.ifPresent(userRoles::add);
         }
         user.setRoles(userRoles);
         userRepo.save(user);
-        UserOutputDto userOutputDto = UserMapper.fromModelToOutputDto(user);
-        return userOutputDto;
+        return UserMapper.fromModelToOutputDto(user);
     }
 
     public List<UserOutputDto> getAllUsers() {

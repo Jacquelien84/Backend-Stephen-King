@@ -5,8 +5,6 @@ import nl.oudhoff.backendstephenking.dto.Input.ReviewInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.helper.BindingResultHelper;
-import nl.oudhoff.backendstephenking.repository.UserRepository;
-import nl.oudhoff.backendstephenking.service.BookService;
 import nl.oudhoff.backendstephenking.service.ReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

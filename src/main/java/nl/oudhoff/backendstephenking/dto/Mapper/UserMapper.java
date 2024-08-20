@@ -6,10 +6,7 @@ import nl.oudhoff.backendstephenking.model.Role;
 import nl.oudhoff.backendstephenking.model.User;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class UserMapper {
     public static User fromInputDtoToModel(UserInputDto userInputDto) {
