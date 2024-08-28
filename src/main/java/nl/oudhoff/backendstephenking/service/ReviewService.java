@@ -37,7 +37,7 @@ public class ReviewService {
             reviewOutputDto.setBookId(review.getBook().getId());
         } else {
             if (review.getUser() != null) {
-                reviewOutputDto.setUserId(review.getUser().getId());
+                reviewOutputDto.setUsername(review.getUser().getUsername());
             }
         }
         return reviewOutputDto;
@@ -95,9 +95,9 @@ public class ReviewService {
         }
     }
 
-    public void addReviewToUser(long reviewId, long userId) {
+    public void addReviewToUser(long reviewId, String username) {
         Optional<Review> r = reviewRepo.findById(reviewId);
-        Optional<User> u = userRepo.findById(userId);
+        Optional<User> u = userRepo.findByUsernameIgnoreCase(username);
         if (r.isPresent() && u.isPresent()) {
             Review review = r.get();
             User user = u.get();
@@ -108,10 +108,10 @@ public class ReviewService {
         }
     }
 
-    public void addReviewAndUserToBook(long reviewId, long bookId, long userId) {
+    public void addReviewAndUserToBook(long reviewId, long bookId, String username) {
         Optional<Review> r = reviewRepo.findById(reviewId);
         Optional<Book> b = bookRepo.findById(bookId);
-        Optional<User> u = userRepo.findById(userId);
+        Optional<User> u = userRepo.findByUsernameIgnoreCase(username);
 
         if (r.isPresent() && b.isPresent() && u.isPresent()) {
             Review review = r.get();

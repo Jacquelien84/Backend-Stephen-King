@@ -31,7 +31,7 @@ public class ReviewMapper {
             reviewOutputDto.setBookId(review.getBook().getId());
         }
         if (review.getUser() != null) {
-            reviewOutputDto.setUserId(review.getUser().getId());
+            reviewOutputDto.setUsername(review.getUser().getUsername());
         }
         return reviewOutputDto;
     }

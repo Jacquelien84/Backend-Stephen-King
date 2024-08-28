@@ -47,11 +47,6 @@ public class UserService {
         }
         return allUserOutputList;
     }
-
-    public UserOutputDto getUserById(long id) {
-        User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User met id " + id + " niet gevonden."));
-        return UserMapper.fromModelToOutputDto(user);
-    }
 }
 
 

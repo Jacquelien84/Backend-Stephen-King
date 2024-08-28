@@ -38,6 +38,9 @@ public class BookMapper {
                 .collect(Collectors.toList());
         bookOutputDto.setReviews(reviewDtos);
 
+        if(book.getBookcover() != null){
+            bookOutputDto.setBookcover(book.getBookcover().getFileName());
+        }
         return bookOutputDto;
     }
 
