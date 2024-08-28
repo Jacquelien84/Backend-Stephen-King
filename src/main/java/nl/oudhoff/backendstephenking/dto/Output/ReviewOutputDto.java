@@ -15,5 +15,5 @@ public class ReviewOutputDto {
     private String reviewText;
     // Deze is nodig voor de koppeling van review en boek/user
     private Long bookId;
-    private Long userId;
+    private String username;
 }

@@ -27,6 +27,9 @@ public class Book {
     @Column(length = 5000, nullable = false)
     private String description;
 
+    @OneToOne
+    Bookcover bookcover;
+
     @OneToMany(mappedBy = "book")
     private List<Review> listOfReviews = new ArrayList<>();
 }

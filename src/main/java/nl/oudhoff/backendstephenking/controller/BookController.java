@@ -1,17 +1,22 @@
 package nl.oudhoff.backendstephenking.controller;
 
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import nl.oudhoff.backendstephenking.dto.Input.BookInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.helper.BindingResultHelper;
+import nl.oudhoff.backendstephenking.model.Book;
 import nl.oudhoff.backendstephenking.service.BookService;
+import nl.oudhoff.backendstephenking.service.BookcoverService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -20,9 +25,12 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+    private final BookcoverService bookcoverService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, BookcoverService bookcoverService) {
+
         this.bookService = bookService;
+        this.bookcoverService = bookcoverService;
     }
 
     @PostMapping
@@ -64,4 +72,22 @@ public class BookController {
         bookService.deleteBookById(id);
         return ResponseEntity.status(HttpStatus.OK).body("Boek met id " + id + " is verwijderd!");
     }
+
+    @PostMapping("/{id}/bookcovers")
+    public ResponseEntity<Book> addBookcoverToBook(@PathVariable("id") Long id, @RequestBody MultipartFile file) throws IOException {
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/books/")
+                .path(id.toString())
+                .path("/bookcovers")
+                .toUriString();
+        String fileName = bookcoverService.storeFile(file);
+        Book book = bookService.addBookcoverToBook(fileName, id);
+        return ResponseEntity.created(URI.create(url)).body(book);
+    }
+
+    @GetMapping("{id}/bookcovers")
+    public ResponseEntity<Resource> getBookcover(@PathVariable("id") long id) {
+        return ResponseEntity.ok().body(bookService.getBookcover(id));
+    }
 }
+

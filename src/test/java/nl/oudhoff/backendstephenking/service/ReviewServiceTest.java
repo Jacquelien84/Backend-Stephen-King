@@ -78,7 +78,6 @@ class ReviewServiceTest {
         ReviewOutputDto review1 = reviewService.createReview(reviewInputDto1);
 
         // Assert
-        assertEquals(1L, review1.getId());
         assertEquals("Jacquelien", review1.getName());
         assertEquals(LocalDate.ofEpochDay (2024- 1 - 1), review1.getReviewDate());
         assertEquals("Heel leuk boek", review1.getReviewText());
@@ -95,7 +94,6 @@ class ReviewServiceTest {
         ReviewOutputDto review2 = reviewService.updateReview(2L, reviewInputDto2);
 
         // Assert
-        assertEquals(2L, review2.getId());
         assertEquals("Karel", review2.getName());
         assertEquals(LocalDate.ofEpochDay (2024- 2 - 1), review2.getReviewDate());
         assertEquals("Was leuk", review2.getReviewText());

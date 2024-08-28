@@ -33,7 +33,7 @@ public class UserController {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
-                        .path("/" + userInputDto.getId()).toUriString());
+                        .path("/" + userInputDto.getUsername()).toUriString());
 
         return ResponseEntity.created(uri).body(createUser);
     }
@@ -41,10 +41,5 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserOutputDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserOutputDto> getUserById(@PathVariable long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
     }
 }

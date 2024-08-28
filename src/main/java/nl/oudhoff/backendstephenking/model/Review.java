@@ -29,7 +29,7 @@ public class Review {
 
     //De koppeling tussen user en review
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_username")
     private User user;
 }
 

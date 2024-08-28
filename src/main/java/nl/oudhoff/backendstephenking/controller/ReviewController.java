@@ -68,15 +68,15 @@ public class ReviewController {
         return ResponseEntity.ok().body("Done");
     }
 
-    @PutMapping("/{reviewId}/users/{userId}")
-    public ResponseEntity<String> addReviewToUser(@PathVariable long reviewId, @PathVariable long userId) {
-        reviewService.addReviewToUser(reviewId, userId);
+    @PutMapping("/{reviewId}/users/{username}")
+    public ResponseEntity<String> addReviewToUser(@PathVariable long reviewId, @PathVariable String username) {
+        reviewService.addReviewToUser(reviewId, username);
         return ResponseEntity.ok().body("Done");
     }
 
-    @PutMapping("/{reviewId}/books/{bookId}/users/{userId}")
-    public ResponseEntity<String> addReviewAndUserToBook(@PathVariable long reviewId, @PathVariable long bookId, @PathVariable long userId) {
-        reviewService.addReviewAndUserToBook(reviewId, bookId, userId);
+    @PutMapping("/{reviewId}/books/{bookId}/users/{username}")
+    public ResponseEntity<String> addReviewAndUserToBook(@PathVariable long reviewId, @PathVariable long bookId, @PathVariable String username) {
+        reviewService.addReviewAndUserToBook(reviewId, bookId, username);
         return ResponseEntity.ok().body("Done");
     }
 }
