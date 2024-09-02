@@ -1,11 +1,13 @@
 package nl.oudhoff.backendstephenking.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import nl.oudhoff.backendstephenking.dto.Input.UserInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.UserOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.helper.BindingResultHelper;
 import nl.oudhoff.backendstephenking.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +43,12 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserOutputDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @Transactional
+    @DeleteMapping("/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable String username) throws ResourceNotFoundException {
+        userService.deleteUser(username);
+        return ResponseEntity.status(HttpStatus.OK).body("User with username " + username + " has been removed.");
     }
 }

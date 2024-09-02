@@ -50,17 +50,17 @@ public class ReviewService {
             reviewRepo.save(model);
             return ReviewMapper.fromModelToOutputDto(model);
         } else {
-            throw new ResourceNotFoundException("Review met userId " + id + " niet gevonden");
+            throw new ResourceNotFoundException("Review with id " + id + " not found");
         }
     }
 
     public ReviewOutputDto getReviewById(long id) {
-        Review review = reviewRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Opmerking met id " + id + " is niet gevonden"));
+        Review review = reviewRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Review with id " + id + " not found"));
         return ReviewMapper.fromModelToOutputDto(review);
     }
 
     public ReviewOutputDto getReviewByName(String name) {
-        Review review = reviewRepo.findByNameIgnoreCase(name).orElseThrow(() -> new ResourceNotFoundException("Opmerking van " + name + " is niet gevonden"));
+        Review review = reviewRepo.findByNameIgnoreCase(name).orElseThrow(() -> new ResourceNotFoundException("Review from " + name + " is is not found"));
         return ReviewMapper.fromModelToOutputDto(review);
     }
 
@@ -91,7 +91,7 @@ public class ReviewService {
             Book book = b.get();
             reviewRepo.save(review);
         } else {
-            throw new ResourceNotFoundException("Een van de id's bestaat niet");
+            throw new ResourceNotFoundException("One of the id's cant be found");
         }
     }
 
@@ -104,7 +104,7 @@ public class ReviewService {
             review.setUser(user);
             reviewRepo.save(review);
         } else {
-            throw new ResourceNotFoundException("Een van de id's bestaat niet");
+            throw new ResourceNotFoundException("One of the id's cant be found");
         }
     }
 
@@ -121,7 +121,7 @@ public class ReviewService {
             review.setUser(user);
             reviewRepo.save(review);
         } else {
-            throw new ResourceNotFoundException("Een van de id's bestaat niet");
+            throw new ResourceNotFoundException("One of the id's cant be found");
         }
     }
 }

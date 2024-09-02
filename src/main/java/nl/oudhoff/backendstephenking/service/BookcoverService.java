@@ -29,8 +29,6 @@ public class BookcoverService {
         this.repo = repo;
 
         Files.createDirectories(fileStoragePath);
-
-
     }
 
     public String storeFile(MultipartFile file) throws IOException {
@@ -45,7 +43,6 @@ public class BookcoverService {
 
 
     public Resource downLoadFile(String fileName) {
-
         Path path = Paths.get(fileStorageLocation).toAbsolutePath().resolve(fileName);
 
         Resource resource;
@@ -55,7 +52,6 @@ public class BookcoverService {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Issue in reading the file", e);
         }
-
         if (resource.exists() && resource.isReadable()) {
             return resource;
         } else {

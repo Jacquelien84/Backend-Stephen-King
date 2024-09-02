@@ -17,7 +17,6 @@ public class Role {
     @Id
     private String rolename;
 
-    //De koppeling tussen user en role
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 }

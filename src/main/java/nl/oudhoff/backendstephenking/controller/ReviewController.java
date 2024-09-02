@@ -1,5 +1,6 @@
 package nl.oudhoff.backendstephenking.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import nl.oudhoff.backendstephenking.dto.Input.ReviewInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
@@ -57,6 +58,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getAllReviews());
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReviewById(@PathVariable long id) {
         return ResponseEntity.ok(reviewService.deleteReviewById(id));

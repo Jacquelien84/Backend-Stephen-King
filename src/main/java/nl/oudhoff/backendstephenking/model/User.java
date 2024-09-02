@@ -20,11 +20,9 @@ public class User {
     @Column(nullable = false, length = 250)
     private String password;
 
-    //De koppeling tussen user en review
     @OneToMany(mappedBy = "user")
     private List<Review> listOfReviews = new ArrayList<>();
 
-    //De koppeling tussen user en role
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 }
