@@ -47,6 +47,15 @@ public class UserService {
         }
         return allUserOutputList;
     }
+
+    public void deleteUser(String username) {
+        Optional<User> user = userRepo.findByUsernameIgnoreCase(username);
+        if (user.isPresent()) {
+            userRepo.deleteByUsernameIgnoreCase(username);
+        } else {
+            throw new ResourceNotFoundException("User not found");
+        }
+    }
 }
 
 

@@ -5,7 +5,6 @@ import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
 import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
 import nl.oudhoff.backendstephenking.model.Book;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,21 +32,14 @@ public class BookMapper {
         bookOutputDto.setMovieAdaptation(book.getMovieAdaptation());
         bookOutputDto.setDescription(book.getDescription());
 
-        List<ReviewOutputDto> reviewDtos = book.getListOfReviews().stream()
+        List<ReviewOutputDto> reviewDto = book.getListOfReviews().stream()
                 .map(ReviewMapper::fromModelToOutputDto)
                 .collect(Collectors.toList());
-        bookOutputDto.setReviews(reviewDtos);
+        bookOutputDto.setReviews(reviewDto);
 
         if(book.getBookcover() != null){
             bookOutputDto.setBookcover(book.getBookcover().getFileName());
         }
         return bookOutputDto;
-    }
-
-    public static List<BookOutputDto> bookModelListToOutputList(List<Book> books) {
-        List<BookOutputDto> bookOutputDtoList = new ArrayList<>();
-        // lambda
-        books.forEach((book) -> bookOutputDtoList.add(fromModelToOutputDto(book)));
-        return bookOutputDtoList;
     }
 }

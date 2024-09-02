@@ -22,14 +22,11 @@ public class Review {
     @Column(length = 1000,nullable = false)
     private String reviewText;
 
-    //De koppelingscode tussen boek en review
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 
-    //De koppeling tussen user en review
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_username")
     private User user;
 }
 

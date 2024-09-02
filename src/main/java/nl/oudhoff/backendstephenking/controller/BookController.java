@@ -1,6 +1,7 @@
 package nl.oudhoff.backendstephenking.controller;
 
-import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import nl.oudhoff.backendstephenking.dto.Input.BookInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
@@ -9,7 +10,10 @@ import nl.oudhoff.backendstephenking.helper.BindingResultHelper;
 import nl.oudhoff.backendstephenking.model.Book;
 import nl.oudhoff.backendstephenking.service.BookService;
 import nl.oudhoff.backendstephenking.service.BookcoverService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -67,10 +71,11 @@ public class BookController {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteBookById(@PathVariable long id) throws ResourceNotFoundException {
         bookService.deleteBookById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Boek met id " + id + " is verwijderd!");
+        return ResponseEntity.status(HttpStatus.OK).body("Book with id " + id + " has been removed.");
     }
 
     @PostMapping("/{id}/bookcovers")
@@ -86,8 +91,18 @@ public class BookController {
     }
 
     @GetMapping("{id}/bookcovers")
-    public ResponseEntity<Resource> getBookcover(@PathVariable("id") long id) {
-        return ResponseEntity.ok().body(bookService.getBookcover(id));
+    public ResponseEntity<Resource> getBookcover(@PathVariable("id") long id, HttpServletRequest request) {
+        Resource resource = bookService.getBookcover(id);
+        String mimeType;
+        try { mimeType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(mimeType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + resource.getFilename())
+                .body(resource);
     }
 }
 
