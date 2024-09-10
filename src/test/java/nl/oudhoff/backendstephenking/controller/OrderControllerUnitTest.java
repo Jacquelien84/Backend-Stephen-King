@@ -1,8 +1,8 @@
 package nl.oudhoff.backendstephenking.controller;
 
 import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
-import nl.oudhoff.backendstephenking.security.JwtService;
 import nl.oudhoff.backendstephenking.service.BookService;
+import nl.oudhoff.backendstephenking.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class OrderControllerUnitTest {
     MockMvc mockMvc;
 
     @MockBean
-    JwtService jwtService;
+    JwtUtil jwtUtil;
 
     @MockBean
     BookService bookService;

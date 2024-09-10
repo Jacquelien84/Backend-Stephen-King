@@ -9,8 +9,9 @@ import java.util.List;
 @Setter
 public class UserOutputDto {
     private String username;
+    private String email;
     private String password;
     private List<ReviewOutputDto> reviews;
-    private String[] roles;
+//    private String[] roles;
 }
 

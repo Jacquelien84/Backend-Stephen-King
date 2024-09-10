@@ -12,6 +12,7 @@ public class UserMapper {
     public static User fromInputDtoToModel(UserInputDto userInputDto) {
         User user = new User();
         user.setUsername(userInputDto.getUsername());
+        user.setEmail(userInputDto.getEmail());
         user.setPassword(userInputDto.getPassword());
         return user;
     }
@@ -19,14 +20,15 @@ public class UserMapper {
     public static UserOutputDto fromModelToOutputDto(User user) {
         UserOutputDto userOutputDto = new UserOutputDto();
         userOutputDto.setUsername(user.getUsername());
+        userOutputDto.setEmail(user.getEmail());
         userOutputDto.setPassword(user.getPassword());
-        if (user.getRoles() != null) {
-            List<String> roles = new ArrayList<>();
-            for (Role role : user.getRoles()) {
-                roles.add(role.getRolename());
-            }
-            userOutputDto.setRoles(roles.toArray(new String[0]));
-        }
+//        if (user.getRoles() != null) {
+//            List<String> roles = new ArrayList<>();
+//            for (Role role : user.getRoles()) {
+//                roles.add(role.getRolename());
+//            }
+//            userOutputDto.setRoles(roles.toArray(new String[0]));
+//        }
         return userOutputDto;
     }
 }
