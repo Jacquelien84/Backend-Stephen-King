@@ -5,19 +5,21 @@ import nl.oudhoff.backendstephenking.model.User;
 import nl.oudhoff.backendstephenking.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepos;
+    private final UserRepository userRepo;
 
-    public MyUserDetailsService(UserRepository repos) {
-        this.userRepos = repos;
+    public MyUserDetailsService(UserRepository UserRepo) {
+        this.userRepo = UserRepo;
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws ResourceNotFoundException {
-        Optional<User> ou = userRepos.findByUsernameIgnoreCase(username);
+        Optional<User> ou = userRepo.findByUsernameIgnoreCase(username);
         if (ou.isPresent()) {
             User user = ou.get();
             return new MyUserDetails(user);

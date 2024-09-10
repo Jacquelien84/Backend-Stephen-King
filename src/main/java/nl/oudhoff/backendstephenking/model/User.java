@@ -17,6 +17,7 @@ public class User {
     @Id
     @Column(nullable = false, unique = true)
     private String username;
+    private String email;
     @Column(nullable = false, length = 250)
     private String password;
 
@@ -25,4 +26,5 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
+
 }

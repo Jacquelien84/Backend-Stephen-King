@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import nl.oudhoff.backendstephenking.util.JwtUtil;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,11 +23,11 @@ import org.slf4j.LoggerFactory;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
-    private final JwtService jwtService;
+    private final JwtUtil jwtUtil;
     private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-    public JwtRequestFilter(JwtService jwtService, UserDetailsService udService) {
-        this.jwtService = jwtService;
+    public JwtRequestFilter(JwtUtil jwtUtil, UserDetailsService udService) {
+        this.jwtUtil = jwtUtil;
         this.userDetailsService = udService;
     }
 
@@ -41,7 +42,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = jwtService.extractUsername(jwt);
+                username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
                 logger.error("JWT extraction failed: {}", e.getMessage());
             }
@@ -49,7 +50,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if (jwtService.validateToken(jwt, userDetails)) {
+            if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new
                         UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

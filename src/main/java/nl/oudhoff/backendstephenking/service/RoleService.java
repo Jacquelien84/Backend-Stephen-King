@@ -22,6 +22,6 @@ public class RoleService {
         for (Role role : repo.findAll()) {
             allRoleOutputList.add(RoleMapper.fromModelToOutputDto(role));
         }
-    return allRoleOutputList;
+        return allRoleOutputList;
     }
 }

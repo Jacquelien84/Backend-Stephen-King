@@ -1,3 +1,4 @@
+
 package nl.oudhoff.backendstephenking.dto.Output;
 
 import lombok.Getter;
