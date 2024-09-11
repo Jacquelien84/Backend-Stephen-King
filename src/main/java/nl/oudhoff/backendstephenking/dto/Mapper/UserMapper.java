@@ -14,6 +14,7 @@ public class UserMapper {
         user.setUsername(userInputDto.getUsername());
         user.setEmail(userInputDto.getEmail());
         user.setPassword(userInputDto.getPassword());
+        user.setApikey(userInputDto.getApikey());
         return user;
     }
 
@@ -22,6 +23,7 @@ public class UserMapper {
         userOutputDto.setUsername(user.getUsername());
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setPassword(user.getPassword());
+        userOutputDto.setApikey(user.getApikey());
 //        if (user.getRoles() != null) {
 //            List<String> roles = new ArrayList<>();
 //            for (Role role : user.getRoles()) {

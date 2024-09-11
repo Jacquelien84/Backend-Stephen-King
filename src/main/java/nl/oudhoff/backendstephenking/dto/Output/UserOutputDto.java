@@ -11,6 +11,7 @@ public class UserOutputDto {
     private String username;
     private String email;
     private String password;
+    private String apikey;
     private List<ReviewOutputDto> reviews;
 //    private String[] roles;
 }

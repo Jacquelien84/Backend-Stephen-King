@@ -9,5 +9,6 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     Optional<User> findByUsernameIgnoreCase(String username);
     boolean existsByUsername(String username);
     void deleteByUsernameIgnoreCase(String username);
+
 }
 

@@ -3,9 +3,9 @@ package nl.oudhoff.backendstephenking.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @Entity
 @Table(name = "bookcovers")
 public class Bookcover {
