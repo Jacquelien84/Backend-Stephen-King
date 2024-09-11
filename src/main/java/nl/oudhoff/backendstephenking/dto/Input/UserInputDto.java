@@ -19,5 +19,6 @@ public class UserInputDto {
     @NotBlank
     @Size(min = 6, message = "Het wachtwoord moet tussen de 6 en 25 tekens lang zijn")
     private String password;
+    private String apikey;
 //    private String[] roles;
 }
