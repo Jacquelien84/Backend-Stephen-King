@@ -5,12 +5,17 @@ import nl.oudhoff.backendstephenking.dto.Input.UserInputDto;
 import nl.oudhoff.backendstephenking.dto.Mapper.UserMapper;
 import nl.oudhoff.backendstephenking.dto.Output.UserOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
+import nl.oudhoff.backendstephenking.model.Role;
 import nl.oudhoff.backendstephenking.model.User;
 import nl.oudhoff.backendstephenking.repository.RoleRepository;
 import nl.oudhoff.backendstephenking.repository.UserRepository;
 import nl.oudhoff.backendstephenking.security.MyUserDetails;
 import nl.oudhoff.backendstephenking.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,25 +25,31 @@ import java.util.*;
 public class UserService {
     private final UserRepository userRepo;
     private final RoleRepository roleRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
     private final JwtUtil jwtUtil;
 
     @Autowired
     public UserService(UserRepository userRepo, RoleRepository roleRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
-        this.passwordEncoder = passwordEncoder;
+        this.encoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
-    @Transactional
+   @Transactional
     public UserOutputDto createUser(UserInputDto userInputDto) {
         User user = UserMapper.fromInputDtoToModel(userInputDto);
-        user.setPassword(passwordEncoder.encode(userInputDto.getPassword()));
+        user.setPassword(encoder.encode(userInputDto.getPassword()));
         userRepo.save(user);
+//        Set<Role> userRoles = user.getRoles();
+//        for (String rolename : userInputDto.getRoles()) {
+//            Optional<Role> or = roleRepo.findById("ROLE_" + rolename);
+//            or.ifPresent(userRoles::add);
+//        }
+//        user.setRoles(userRoles);
+//        userRepo.save(user);
         return UserMapper.fromModelToOutputDto(user);
     }
-
 
     public String loginUser(String username, String password) {
         if (username == null || password == null) {
@@ -46,7 +57,7 @@ public class UserService {
         }
 
         User user = userRepo.findByUsernameIgnoreCase(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!encoder.matches(password, user.getPassword())) {
             throw new ResourceNotFoundException("Invalid password");
         }
 

@@ -1,6 +1,5 @@
 package nl.oudhoff.backendstephenking.controller;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import nl.oudhoff.backendstephenking.dto.Input.UserInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.UserOutputDto;
@@ -22,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -62,11 +61,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @Transactional
+
     @DeleteMapping("/delete/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable String username) throws ResourceNotFoundException {
         userService.deleteUser(username);
         return ResponseEntity.status(HttpStatus.OK).body("User with username " + username + " has been removed.");
     }
 }
-
