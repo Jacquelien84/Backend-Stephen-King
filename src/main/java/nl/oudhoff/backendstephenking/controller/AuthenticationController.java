@@ -16,7 +16,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+
 @RestController
 public class AuthenticationController {
 
@@ -49,9 +49,9 @@ public class AuthenticationController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
-        @PostMapping("/login")
-        public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
-            LoginResponseDto response = authenticationService.login(loginRequest.getUsername(), loginRequest.getPassword());
-            return ResponseEntity.ok(response);
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
+        LoginResponseDto response = authenticationService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        return ResponseEntity.ok(response);
     }
 }

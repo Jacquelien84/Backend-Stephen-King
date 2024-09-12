@@ -28,7 +28,6 @@ public class SecurityConfig  {
 
     private final JwtRequestFilter jwtRequestFilter;
 
-
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
     }
@@ -51,10 +50,11 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
-                                .requestMatchers(HttpMethod.DELETE, "/api/users/delete/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/admin").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/users/delete/**").permitAll()
 
                                 .requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/books/**").hasRole("ADMIN")
@@ -78,6 +78,7 @@ public class SecurityConfig  {
                                 .requestMatchers("/authenticated").authenticated()
                                 .requestMatchers("/authenticated").permitAll()
                                 .anyRequest().denyAll()
+
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

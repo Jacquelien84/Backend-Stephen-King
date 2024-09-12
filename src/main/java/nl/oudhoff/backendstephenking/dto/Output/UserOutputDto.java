@@ -13,6 +13,6 @@ public class UserOutputDto {
     private String password;
     private String apikey;
     private List<ReviewOutputDto> reviews;
-//    private String[] roles;
+    private String[] roles;
 }
 

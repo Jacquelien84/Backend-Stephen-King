@@ -25,11 +25,6 @@ public class User {
     private List<Review> listOfReviews = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
-
-    public enum Role {
-        ADMIN, MODERATOR, USER;
-    }
 
 }
