@@ -2,11 +2,7 @@ package nl.oudhoff.backendstephenking.dto.Mapper;
 
 import nl.oudhoff.backendstephenking.dto.Input.UserInputDto;
 import nl.oudhoff.backendstephenking.dto.Output.UserOutputDto;
-import nl.oudhoff.backendstephenking.model.Role;
 import nl.oudhoff.backendstephenking.model.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserMapper {
     public static User fromInputDtoToModel(UserInputDto userInputDto) {
@@ -15,6 +11,7 @@ public class UserMapper {
         user.setEmail(userInputDto.getEmail());
         user.setPassword(userInputDto.getPassword());
         user.setApikey(userInputDto.getApikey());
+        user.setAuthorities(user.getAuthorities());
         return user;
     }
 
@@ -24,13 +21,7 @@ public class UserMapper {
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setPassword(user.getPassword());
         userOutputDto.setApikey(user.getApikey());
-//        if (user.getRoles() != null) {
-//            List<String> roles = new ArrayList<>();
-//            for (Role role : user.getRoles()) {
-//                roles.add(role.getRolename());
-//            }
-//            userOutputDto.setRoles(roles.toArray(new String[0]));
-//        }
+        userOutputDto.setAuthority(user.getAuthorities());
         return userOutputDto;
     }
 }

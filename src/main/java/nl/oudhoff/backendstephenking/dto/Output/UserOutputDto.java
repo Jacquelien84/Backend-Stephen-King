@@ -1,18 +1,21 @@
 package nl.oudhoff.backendstephenking.dto.Output;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
+import nl.oudhoff.backendstephenking.model.Authority;
 
 import java.util.List;
+import java.util.Set;
 
-@Getter
-@Setter
+@Data
 public class UserOutputDto {
     private String username;
     private String email;
     private String password;
     private String apikey;
     private List<ReviewOutputDto> reviews;
-    private String[] roles;
+    @JsonSerialize
+    public Set<Authority> authority;
+    boolean enabled = true;
 }
 

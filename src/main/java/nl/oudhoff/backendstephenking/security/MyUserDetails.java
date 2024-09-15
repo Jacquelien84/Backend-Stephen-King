@@ -1,6 +1,6 @@
 package nl.oudhoff.backendstephenking.security;
 
-import nl.oudhoff.backendstephenking.model.Role;
+import nl.oudhoff.backendstephenking.model.Authority;
 import nl.oudhoff.backendstephenking.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,8 +21,8 @@ public class MyUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        for (Role role : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(role.getRolename()));
+        for (Authority authority : user.getAuthorities()) {
+            authorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
         }
 
         return authorities;
