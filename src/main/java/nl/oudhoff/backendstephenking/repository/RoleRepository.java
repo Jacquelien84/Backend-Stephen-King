@@ -1,8 +1,0 @@
-package nl.oudhoff.backendstephenking.repository;
-
-import nl.oudhoff.backendstephenking.model.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface RoleRepository extends JpaRepository<Role, String> {
-    Role findByRolename(String username);
-}

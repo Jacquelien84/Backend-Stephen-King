@@ -5,10 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,16 +27,21 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig  {
 
-
     private final JwtRequestFilter jwtRequestFilter;
+    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter, UserDetailsService userDetailsService) {
         this.jwtRequestFilter = jwtRequestFilter;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -56,14 +63,14 @@ public class SecurityConfig  {
                                 .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                                 .requestMatchers(HttpMethod.DELETE, "/users/delete/**").permitAll()
 
-                                .requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/books/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/books/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/books/title/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/books").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/books/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/books/{id}/bookcovers").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/books/{id}/bookcovers").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/books").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/books/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/books/title/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/books").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/books/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/books/{id}/bookcovers").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/books/{id}/bookcovers").permitAll()
 
                                 .requestMatchers(HttpMethod.POST, "/reviews").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/reviews/**").permitAll()

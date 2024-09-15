@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/books")
 public class BookController {
@@ -32,7 +33,6 @@ public class BookController {
     private final BookcoverService bookcoverService;
 
     public BookController(BookService bookService, BookcoverService bookcoverService) {
-
         this.bookService = bookService;
         this.bookcoverService = bookcoverService;
     }
@@ -66,8 +66,8 @@ public class BookController {
     }
 
     @GetMapping
+    @Transactional
     public ResponseEntity<List<BookOutputDto>> getAllBooks() {
-
         return ResponseEntity.ok(bookService.getAllBooks());
     }
 
