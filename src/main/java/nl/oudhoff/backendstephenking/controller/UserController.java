@@ -53,6 +53,12 @@ public class UserController {
         return ResponseEntity.created(uri).body(createUser);
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<UserOutputDto> getUserByUsername(@PathVariable String username) {
+        UserOutputDto userOutputDto = userService.getUser(username);
+        return ResponseEntity.ok(userOutputDto);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
         // Controleer op validatiefouten

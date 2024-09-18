@@ -82,7 +82,7 @@ public class BookService {
 
     public Book addBookcoverToBook(String fileName, long id) {
         Optional<Book> optBook = bookRepo.findById(id);
-        Optional<Bookcover> optBookcover = uploadRepository.findByFileName(fileName);
+        Optional<Bookcover> optBookcover = uploadRepository.findById(fileName);
 
         if (optBook.isPresent() && optBookcover.isPresent()) {
             Bookcover bookcover = optBookcover.get();
@@ -106,6 +106,7 @@ public class BookService {
         return bookcoverService.downLoadFile(bookcover.getFileName());
     }
 }
+
 
 
 
