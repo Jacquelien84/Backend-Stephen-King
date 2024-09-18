@@ -3,6 +3,7 @@ package nl.oudhoff.backendstephenking.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +26,10 @@ public class Book {
     @Column(length = 5000, nullable = false)
     private String description;
 
-    @OneToOne
-    Bookcover bookcover;
 
-    @OneToMany(mappedBy = "book")
+    @OneToOne
+    private Bookcover bookcover;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private List<Review> listOfReviews = new ArrayList<>();
 }

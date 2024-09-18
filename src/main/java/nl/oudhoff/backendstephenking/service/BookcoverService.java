@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 @Service
+@CrossOrigin
 public class BookcoverService {
     private final Path fileStoragePath;
     private final String fileStorageLocation;

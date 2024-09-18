@@ -31,12 +31,12 @@ public class BookMapper {
         bookOutputDto.setReleased(book.getReleased());
         bookOutputDto.setMovieAdaptation(book.getMovieAdaptation());
         bookOutputDto.setDescription(book.getDescription());
-
-        List<ReviewOutputDto> reviewDto = book.getListOfReviews().stream()
-                .map(ReviewMapper::fromModelToOutputDto)
-                .collect(Collectors.toList());
-        bookOutputDto.setReviews(reviewDto);
-
+        if(book.getListOfReviews() != null) {
+            List<ReviewOutputDto> reviewDto = book.getListOfReviews().stream()
+                    .map(ReviewMapper::fromModelToOutputDto)
+                    .collect(Collectors.toList());
+            bookOutputDto.setReviews(reviewDto);
+        }
         if(book.getBookcover() != null){
             bookOutputDto.setBookcover(book.getBookcover().getFileName());
         }

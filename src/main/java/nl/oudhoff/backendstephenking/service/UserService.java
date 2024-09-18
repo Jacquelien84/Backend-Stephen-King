@@ -134,4 +134,13 @@ public class UserService {
         user.removeAuthority(authorityToRemove);
         userRepo.save(user);
     }
+
+    public UserOutputDto getUser(String username) {
+        Optional<User> user = userRepo.findByUsernameIgnoreCase(username);
+        if (user.isPresent()) {
+            return UserMapper.fromModelToOutputDto(user.get());
+        } else {
+            throw new ResourceNotFoundException("User not found");
+        }
+    }
 }
