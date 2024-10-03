@@ -1,7 +1,7 @@
 package nl.oudhoff.backendstephenking.service;
 
-import nl.oudhoff.backendstephenking.dto.Input.BookInputDto;
-import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
+import nl.oudhoff.backendstephenking.dto.input.BookInputDto;
+import nl.oudhoff.backendstephenking.dto.output.BookOutputDto;
 import nl.oudhoff.backendstephenking.model.Book;
 import nl.oudhoff.backendstephenking.repository.BookRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -164,14 +164,14 @@ class BookServiceTest {
     void getBookByTitle() {
 
         // Arrange
-        when(bookRepo.findByTitleIgnoreCase(anyString())).thenReturn(Optional.of(book1));
+        when(bookRepo.findByTitleContainingIgnoreCase(anyString())).thenReturn(Optional.of(book1));
 
         // Act
         BookOutputDto bookOutputDto = bookService.getBookByTitle("Carrie");
 
         // Assert
         assertEquals("Carrie", bookOutputDto.getTitle());
-        verify(bookRepo).findByTitleIgnoreCase("Carrie");
+        verify(bookRepo).findByTitleContainingIgnoreCase("Carrie");
     }
 
     @Test

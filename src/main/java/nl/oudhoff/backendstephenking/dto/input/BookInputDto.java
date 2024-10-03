@@ -1,4 +1,4 @@
-package nl.oudhoff.backendstephenking.dto.Input;
+package nl.oudhoff.backendstephenking.dto.input;
 
 import lombok.Getter;
 import lombok.Setter;

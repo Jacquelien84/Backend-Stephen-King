@@ -1,146 +1,99 @@
 package nl.oudhoff.backendstephenking.service;
 
-import jakarta.transaction.Transactional;
-import nl.oudhoff.backendstephenking.dto.Input.UserInputDto;
-import nl.oudhoff.backendstephenking.dto.Mapper.UserMapper;
-import nl.oudhoff.backendstephenking.dto.Output.UserOutputDto;
-import nl.oudhoff.backendstephenking.exception.BadRequestException;
-import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
-import nl.oudhoff.backendstephenking.model.Authority;
+
+import nl.oudhoff.backendstephenking.dto.mapper.UserMapper;
+import nl.oudhoff.backendstephenking.dto.output.UserOutputDto;
+import nl.oudhoff.backendstephenking.model.Book;
 import nl.oudhoff.backendstephenking.model.User;
+import nl.oudhoff.backendstephenking.repository.BookRepository;
 import nl.oudhoff.backendstephenking.repository.UserRepository;
-import nl.oudhoff.backendstephenking.security.MyUserDetails;
-import nl.oudhoff.backendstephenking.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+
     private final UserRepository userRepo;
-    private final PasswordEncoder encoder;
-    private final JwtUtil jwtUtil;
+    private final BookRepository bookRepo;
 
-    @Autowired
-    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+
+    public UserService(UserRepository userRepo, BookRepository bookRepo) {
         this.userRepo = userRepo;
-        this.encoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
+        this.bookRepo = bookRepo;
     }
 
-    @Transactional
-    public UserOutputDto createUser(UserInputDto userInputDto) {
-        // Map DTO naar User model
-        User user = UserMapper.fromInputDtoToModel(userInputDto);
-
-        // Encode het wachtwoord
-        String encodedPassword = encoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-
-        // Opslaan van de gebruiker
-        userRepo.save(user);
-
-        // Voeg standaardrol "ROLE_USER" toe
-        user.addAuthority("ROLE_USER");
-        userRepo.save(user);
-
-        // Retourneer de UserOutputDto
-        return UserMapper.fromModelToOutputDto(user);
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public Set<Authority> getAuthorities(String username) {
-        // Controleer of de gebruiker bestaat
-        if (!userRepo.existsById(username)) {
+    public UserOutputDto get(String username) {
+        Optional<User> model = userRepo.findByUsername(username);
+        if (model.isPresent()) {
+            return UserMapper.fromModelToOutputDto(model.get());
+        } else {
             throw new UsernameNotFoundException(username);
         }
-
-        // Haal de gebruiker op en retourneer zijn autoriteiten
-        User user = userRepo.findByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return user.getAuthorities();
     }
 
-    public String loginUser(String username, String password) {
-        // Controleer of gebruikersnaam en wachtwoord niet null zijn
-        if (username == null || password == null) {
-            throw new ResourceNotFoundException("Invalid username or password");
+    public List<UserOutputDto> getAll() {
+        List<User> models = userRepo.findAll();
+        List<UserOutputDto> userOutputDto = new ArrayList<>();
+
+        for (User u : models) {
+            userOutputDto.add(UserMapper.fromModelToOutputDto(u));
         }
 
-        // Haal de gebruiker op, of gooi een exception als deze niet gevonden wordt
-        User user = userRepo.findByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        // Controleer of het wachtwoord overeenkomt
-        if (!encoder.matches(password, user.getPassword())) {
-            throw new ResourceNotFoundException("Invalid password");
-        }
-
-        // Genereer en retourneer een JWT-token
-        MyUserDetails myUserDetails = new MyUserDetails(user);
-        return jwtUtil.generateToken(myUserDetails);
+        return userOutputDto;
     }
 
-    public List<UserOutputDto> getAllUsers() {
-        // Gebruik de stream API om gebruikers te mappen naar DTO's
-        return userRepo.findAll().stream()
-                .map(UserMapper::fromModelToOutputDto)
-                .collect(Collectors.toList());
-    }
+    public Optional<User> assignBookToFavourites(String userId, Long bookId) {
+        Optional<User> user = userRepo.findByUsername(userId);
+        Optional<Book> book = bookRepo.findById(bookId);
 
-    public void deleteUser(String username) {
-        // Controleer of de gebruiker bestaat
-        Optional<User> user = userRepo.findByUsernameIgnoreCase(username);
+        if (book.isPresent() && user.isPresent()) {
+            User userEntity = user.get();
+            Book bookEntity = book.get();
 
-        // Als de gebruiker bestaat, verwijder deze
-        if (user.isPresent()) {
-            userRepo.deleteByUsernameIgnoreCase(username);
+            if (!userEntity.getFavouriteBooks().contains(bookEntity)) {
+                userEntity.getFavouriteBooks().add(bookEntity);
+                bookEntity.getFavourites().add(userEntity);
+
+                userRepo.save(userEntity);
+                bookRepo.save(bookEntity);
+            }
+            return Optional.of(userEntity);
         } else {
-            throw new ResourceNotFoundException("User not found");
+            return Optional.empty();
         }
     }
 
-    public void addAuthority(String username, String authority) {
-        // Controleer of de gebruiker bestaat
-        User user = userRepo.findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+    public Optional<User> removeBookFromFavourites(String userId, Long bookId) {
+        Optional<User> user = userRepo.findByUsername(userId);
+        Optional<Book> book = bookRepo.findById(bookId);
 
-        // Controleer of de gebruiker de rol al heeft
-        if (user.getAuthorities().stream()
-                .anyMatch(existingAuthority -> existingAuthority.getAuthority().equals(authority))) {
-            throw new BadRequestException("Gebruiker heeft deze rol al");
-        }
+        if (book.isPresent() && user.isPresent()) {
+            User userEntity = user.get();
+            Book bookEntity = book.get();
 
-        // Voeg de nieuwe autoriteit toe en sla op
-        user.addAuthority(new Authority(username, authority));
-        userRepo.save(user);
-    }
+            userEntity.getFavouriteBooks().remove(bookEntity);
+            bookEntity.getFavourites().remove(userEntity);
 
-    public void removeAuthority(String username, String authority) {
-        // Controleer of de gebruiker bestaat
-        User user = userRepo.findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+            userRepo.save(userEntity);
+            bookRepo.save(bookEntity);
 
-        // Zoek de autoriteit om te verwijderen
-        Authority authorityToRemove = user.getAuthorities().stream()
-                .filter(a -> a.getAuthority().equalsIgnoreCase(authority))
-                .findAny()
-                .orElseThrow(() -> new BadRequestException("Authority not found"));
-
-        // Verwijder de autoriteit en sla de gebruiker op
-        user.removeAuthority(authorityToRemove);
-        userRepo.save(user);
-    }
-
-    public UserOutputDto getUser(String username) {
-        Optional<User> user = userRepo.findByUsernameIgnoreCase(username);
-        if (user.isPresent()) {
-            return UserMapper.fromModelToOutputDto(user.get());
+            return Optional.of(userEntity);
         } else {
-            throw new ResourceNotFoundException("User not found");
+            return Optional.empty();
         }
     }
 }
+

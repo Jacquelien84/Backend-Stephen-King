@@ -1,12 +1,8 @@
-package nl.oudhoff.backendstephenking.dto.Mapper;
+package nl.oudhoff.backendstephenking.dto.mapper;
 
-import nl.oudhoff.backendstephenking.dto.Input.BookInputDto;
-import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
-import nl.oudhoff.backendstephenking.dto.Output.ReviewOutputDto;
+import nl.oudhoff.backendstephenking.dto.input.BookInputDto;
+import nl.oudhoff.backendstephenking.dto.output.BookOutputDto;
 import nl.oudhoff.backendstephenking.model.Book;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BookMapper {
 
@@ -31,12 +27,7 @@ public class BookMapper {
         bookOutputDto.setReleased(book.getReleased());
         bookOutputDto.setMovieAdaptation(book.getMovieAdaptation());
         bookOutputDto.setDescription(book.getDescription());
-        if(book.getListOfReviews() != null) {
-            List<ReviewOutputDto> reviewDto = book.getListOfReviews().stream()
-                    .map(ReviewMapper::fromModelToOutputDto)
-                    .collect(Collectors.toList());
-            bookOutputDto.setReviews(reviewDto);
-        }
+        bookOutputDto.setFavourites(book.getFavourites());
         if(book.getBookcover() != null){
             bookOutputDto.setBookcover(book.getBookcover().getFileName());
         }

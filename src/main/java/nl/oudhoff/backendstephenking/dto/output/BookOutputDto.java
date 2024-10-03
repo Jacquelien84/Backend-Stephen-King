@@ -1,9 +1,10 @@
-package nl.oudhoff.backendstephenking.dto.Output;
+package nl.oudhoff.backendstephenking.dto.output;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.oudhoff.backendstephenking.model.User;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,6 +17,6 @@ public class BookOutputDto {
     private Long released;
     private String movieAdaptation;
     private String description;
-    private List<ReviewOutputDto> reviews;
     private String bookcover;
+    private Set<User> favourites;
 }

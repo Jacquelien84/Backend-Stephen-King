@@ -1,8 +1,8 @@
 package nl.oudhoff.backendstephenking.service;
 
-import nl.oudhoff.backendstephenking.dto.Input.BookInputDto;
-import nl.oudhoff.backendstephenking.dto.Mapper.BookMapper;
-import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
+import nl.oudhoff.backendstephenking.dto.input.BookInputDto;
+import nl.oudhoff.backendstephenking.dto.mapper.BookMapper;
+import nl.oudhoff.backendstephenking.dto.output.BookOutputDto;
 import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.model.Book;
 import nl.oudhoff.backendstephenking.model.Bookcover;
@@ -55,7 +55,7 @@ public class BookService {
     }
 
     public BookOutputDto getBookByTitle(String title) {
-        Book book = bookRepo.findByTitleIgnoreCase(title).
+        Book book = bookRepo.findByTitleContainingIgnoreCase(title).
                 orElseThrow(() -> new ResourceNotFoundException("Book with titel " + title + " not found"));
 
         return BookMapper.fromModelToOutputDto(book);
@@ -106,6 +106,12 @@ public class BookService {
         return bookcoverService.downLoadFile(bookcover.getFileName());
     }
 }
+
+
+
+
+
+
 
 
 

@@ -1,14 +1,7 @@
--- Insert into authorities table
-INSERT INTO authorities (username, authority)
-VALUES  ('Jacquelien', 'ROLE_ADMIN'),
-        ('Bets', 'ROLE_MODERATOR'),
-        ('Karel', 'ROLE_USER');
-
 -- Insert into users table
-INSERT INTO users (username, email, password, apikey)
-VALUES ('Jacquelien', 'jdoudhoff@fictional.nl', '$2a$10$7uUFnAPkEHs3ypcdK6Xvlu8MXBIksCQaA9EJ8pJPGal7dwix6Oo32', '514270'),
-       ('Bets', 'betsreader@fictional.nl', '$2a$10$xUI42XAG/Uxdp79XX2SQluWZS8x1wewXEVB.UkHptXFYomWUiL/cS', '213274'),
-       ('Karel', 'koudhoff@fictional.nl', '$2a$10$0/rnlDxxODqMojv9jOJtJOPO67rLPUqslv.0kEolyUyHOftx1rFlm', '316270');
+INSERT INTO users (username, email, password, role)
+VALUES ('Jacquelien', 'jdoudhoff@fictional.nl', '$2a$10$Xm6YVAv6fKzdMR4iw3.TUOozGXCrYmw5ja64rc2sOv1fw3fSmTmCS', 'ADMIN' ),
+       ('Karel', 'koudhoff@fictional.nl', '$2a$10$hyOCFja70XJahdqtniYavuuuR160nzXLhNta17DPFNOu8lYLH0ZOS', 'USER');
 
 -- Insert into books table
 INSERT INTO books (id, title, author, original_title, released, movie_adaptation, description)
