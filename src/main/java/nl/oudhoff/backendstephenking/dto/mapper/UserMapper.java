@@ -1,7 +1,7 @@
-package nl.oudhoff.backendstephenking.dto.Mapper;
+package nl.oudhoff.backendstephenking.dto.mapper;
 
-import nl.oudhoff.backendstephenking.dto.Input.UserInputDto;
-import nl.oudhoff.backendstephenking.dto.Output.UserOutputDto;
+import nl.oudhoff.backendstephenking.dto.input.UserInputDto;
+import nl.oudhoff.backendstephenking.dto.output.UserOutputDto;
 import nl.oudhoff.backendstephenking.model.User;
 
 public class UserMapper {
@@ -10,8 +10,7 @@ public class UserMapper {
         user.setUsername(userInputDto.getUsername());
         user.setEmail(userInputDto.getEmail());
         user.setPassword(userInputDto.getPassword());
-        user.setApikey(userInputDto.getApikey());
-        user.setAuthorities(user.getAuthorities());
+        user.setRole(userInputDto.getRole());
         return user;
     }
 
@@ -20,8 +19,8 @@ public class UserMapper {
         userOutputDto.setUsername(user.getUsername());
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setPassword(user.getPassword());
-        userOutputDto.setApikey(user.getApikey());
-        userOutputDto.setAuthority(user.getAuthorities());
+        userOutputDto.setRole(user.getRole());
+        userOutputDto.setFavouriteBooks(user.getFavouriteBooks());
         return userOutputDto;
     }
 }

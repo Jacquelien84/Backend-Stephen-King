@@ -1,6 +1,6 @@
 package nl.oudhoff.backendstephenking.util;
 
-import nl.oudhoff.backendstephenking.dto.Output.BookOutputDto;
+import nl.oudhoff.backendstephenking.dto.output.BookOutputDto;
 import nl.oudhoff.backendstephenking.model.Bookcover;
 import nl.oudhoff.backendstephenking.repository.BookcoverRepository;
 import nl.oudhoff.backendstephenking.service.BookService;

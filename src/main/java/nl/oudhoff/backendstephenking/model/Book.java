@@ -1,11 +1,10 @@
 package nl.oudhoff.backendstephenking.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -26,10 +25,10 @@ public class Book {
     @Column(length = 5000, nullable = false)
     private String description;
 
-
     @OneToOne
     private Bookcover bookcover;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
-    private List<Review> listOfReviews = new ArrayList<>();
+    @JsonBackReference(value="favouriteBooks")
+    @ManyToMany (mappedBy = "favouriteBooks")
+    private Set<User> favourites;
 }

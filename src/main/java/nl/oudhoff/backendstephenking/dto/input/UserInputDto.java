@@ -1,14 +1,10 @@
-package nl.oudhoff.backendstephenking.dto.Input;
+package nl.oudhoff.backendstephenking.dto.input;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import nl.oudhoff.backendstephenking.model.Authority;
+import nl.oudhoff.backendstephenking.model.Role;
 import org.springframework.stereotype.Component;
-
-
-import java.util.Set;
 
 
 @Data
@@ -21,8 +17,5 @@ public class UserInputDto {
     @NotBlank
     @Size(min = 6, message = "Het wachtwoord moet tussen de 6 en 25 tekens lang zijn")
     private String password;
-    private String apikey;
-    @JsonSerialize
-    public Set<Authority> authority;
-    boolean enabled = true;
+    private Role role;
 }

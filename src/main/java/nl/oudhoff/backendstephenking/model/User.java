@@ -1,9 +1,14 @@
 package nl.oudhoff.backendstephenking.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,40 +16,57 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(nullable = false, unique = true)
-    private String username;
+    String username;
+
+    @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false, length = 250)
+
+    @Column(nullable = false)
     private String password;
-    @Column
-    private String apikey;
 
-    @OneToMany(mappedBy = "user")
-    private List<Review> listOfReviews = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    Role role;
 
-    @OneToMany(
-            targetEntity = Authority.class,
-            mappedBy = "username",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    private Set<Authority> authorities = new HashSet<>();
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public void addAuthority(Authority authority) {
-        this.authorities.add(authority);
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
     }
 
-    public void addAuthority(String authorityString) {
-        this.authorities.add(new Authority(this.username, authorityString));
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
     }
 
-    public void removeAuthority(Authority authority) {
-        this.authorities.remove(authority);
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
     }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonManagedReference(value="favouriteBooks")
+    @JoinTable( name = "favourites",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<Book> favouriteBooks;
 }
+

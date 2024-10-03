@@ -1,57 +1,52 @@
 package nl.oudhoff.backendstephenking.controller;
 
-import nl.oudhoff.backendstephenking.dto.Output.AuthOutputDto;
-import nl.oudhoff.backendstephenking.dto.dto.LoginRequestDto;
-import nl.oudhoff.backendstephenking.dto.dto.LoginResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import nl.oudhoff.backendstephenking.dto.input.UserInputDto;
+import nl.oudhoff.backendstephenking.dto.output.AuthenticationResponse;
+import nl.oudhoff.backendstephenking.exception.AuthenticationFailedException;
 import nl.oudhoff.backendstephenking.service.AuthenticationService;
-import nl.oudhoff.backendstephenking.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
+@CrossOrigin
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
-    private final AuthenticationManager authManager;
-    private final JwtUtil jwtUtil;
+    private final AuthenticationService authService;
 
-    @Autowired
-    public AuthenticationController(AuthenticationService authenticationService, AuthenticationManager authManager, JwtUtil jwtUtil) {
-        this.authenticationService = authenticationService;
-        this.authManager = authManager;
-        this.jwtUtil = jwtUtil;
+    public AuthenticationController(AuthenticationService authService) {
+        this.authService = authService;
     }
 
-    @PostMapping("/auth")
-    public ResponseEntity<Object> signIn(@RequestBody AuthOutputDto authDto) {
-        UsernamePasswordAuthenticationToken up =
-                new UsernamePasswordAuthenticationToken(authDto.username, authDto.password);
-
+    @PostMapping("/register")
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserInputDto request ) throws Exception {
         try {
-            Authentication auth = authManager.authenticate(up);
-
-            UserDetails ud = (UserDetails) auth.getPrincipal();
-            String token = jwtUtil.generateToken(ud);
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .body("Token generated");
-        } catch (AuthenticationException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.ok(authService.register(request));
+        }
+        catch(AuthenticationFailedException e) {
+            throw new AuthenticationFailedException(e.getCause());
         }
     }
+
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
-        LoginResponseDto response = authenticationService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody UserInputDto request) throws AuthenticationFailedException {
+
+        try {
+            return ResponseEntity.ok(authService.authenticate(request));
+        }
+        catch(AuthenticationFailedException e) {
+            throw new AuthenticationFailedException(e.getCause());
+        }
+    }
+
+    @PostMapping("/refresh_token")
+    public ResponseEntity<Object> refreshToken(HttpServletRequest request, HttpServletResponse response) throws AuthenticationFailedException {
+        try {
+            return ResponseEntity.ok(authService.refreshToken(request, response));
+        }
+        catch(AuthenticationFailedException e) {
+            throw new AuthenticationFailedException(e.getCause());
+        }
     }
 }
