@@ -32,9 +32,11 @@ public class BookController {
     private final BookService bookService;
     private final BookcoverService bookcoverService;
 
+
     public BookController(BookService bookService, BookcoverService bookcoverService) {
         this.bookService = bookService;
         this.bookcoverService = bookcoverService;
+
     }
 
     @PostMapping
@@ -43,10 +45,8 @@ public class BookController {
             throw new ResourceNotFoundException("Something went wrong, Please check the following fields. " + BindingResultHelper.getErrorMessage(bindingResult));
         }
         BookOutputDto createBook = bookService.createBook(bookInputDto);
-        URI uri = URI.create(
-                ServletUriComponentsBuilder
-                        .fromCurrentRequest()
-                        .path("/" + bookInputDto.getId()).toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/" + createBook.getId()).toUriString());
         return ResponseEntity.created(uri).body(createBook);
     }
 
@@ -90,7 +90,7 @@ public class BookController {
         return ResponseEntity.created(URI.create(url)).body(book);
     }
 
-    @GetMapping("{id}/bookcovers")
+    @GetMapping("/{id}/bookcovers")
     public ResponseEntity<Resource> getBookcover(@PathVariable("id") long id, HttpServletRequest request) {
         Resource resource = bookService.getBookcover(id);
         String mimeType;

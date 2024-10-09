@@ -1,10 +1,7 @@
 package nl.oudhoff.backendstephenking.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Set;
 
 @Data
 @Entity
@@ -27,8 +24,4 @@ public class Book {
 
     @OneToOne
     private Bookcover bookcover;
-
-    @JsonBackReference(value="favouriteBooks")
-    @ManyToMany (mappedBy = "favouriteBooks")
-    private Set<User> favourites;
 }

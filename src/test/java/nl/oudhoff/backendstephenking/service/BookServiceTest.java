@@ -32,13 +32,12 @@ class BookServiceTest {
     @InjectMocks
     BookService bookService;
 
-    BookInputDto bookInputDto1;
-    BookInputDto bookInputDto2;
-    BookInputDto bookInputDto3;
     Book book1;
     Book book2;
     Book book3;
-
+    BookInputDto bookInputDto1;
+    BookInputDto bookInputDto2;
+    BookInputDto bookInputDto3;
 
     @BeforeEach
     void setUp() {
@@ -101,6 +100,7 @@ class BookServiceTest {
     void tearDown() {
     }
 
+    //    Test 1
     @Test
     @DisplayName("Should create a book")
     void createBook() {
@@ -120,6 +120,7 @@ class BookServiceTest {
         assertEquals("Ben Mears was pas zeven jaar toen hij zijn geboortestadje 'Salem's Lot' verliet. Nu, vijfentwintig jaar later, is hij teruggekomen om de waarheid bloot te leggen. De waarheid over de geheimzinnige verdwijningen, de spookverhalen en de geestesverschijningen. Maar niemand wist dat er ook een vreemdeling was gekomen, iemand die een geheim met zich droeg dat zo oud was als de wereld. Zij die hij aanraakte zouden sterven, met al degenen die zij liefhebben. Alles zou voor altijd veranderen. Voor Susan, die niet beschermd kon worden door haar liefde voor Ben. Voor Vader Callahan, de priester die zijn geloof aan een laatste proef onderwierp. En voor Mark, een kleine jongen die zijn fantasiewereld werkelijkheid ziet worden. Toch blijkt juist hij het beste in staat de huiveringwekkende nachtmerrie van 'Salem's Lot' het hoofd te bieden.", bookOutputDto.getDescription());
     }
 
+    //    Test 2
     @Test
     @DisplayName("Should update the information of a book")
     void updateBook() {
@@ -139,6 +140,7 @@ class BookServiceTest {
         assertEquals("Het verhaal speelt zich af in het verlaten Overlook Hotel ergens in de Rocky Mountains, waar schrijver Jack Torrance, zijn vrouw Wendy en hun zoontje Danny huismeesters zijn. Danny is helderziend en voorziet het gevaar, de spoken van het verleden komen in het hotel opnieuw tot leven. Jack merkt dit ook en het hotel drijft hem tot waanzin. Dit leidt ertoe dat Wendy en Danny, omsloten door sneeuw, ver van de buitenwereld, opgesloten zitten met een levensgevaarlijke gek.", book3.getDescription());
         }
 
+    //    Test 3
     @Test
     @DisplayName("Should find a book by it's id")
     void getBookById() {
@@ -159,6 +161,7 @@ class BookServiceTest {
         assertEquals("Het verhaal gaat over Carrie, een zeventienjarig meisje met telekinetische gaven. Ze is een buitenbeentje op school en wordt vaak gepest en vernederd, ook door haar dominante moeder. Maar ze ontdekt haar krachten en krijgt deze steeds meer onder controle. Op het schoolbal gaan haar klasgenoten te ver en neemt ze wraak...", bookOutputDto.getDescription() );
     }
 
+    //    Test 4
     @Test
     @DisplayName("Should find a book by it's title")
     void getBookByTitle() {
@@ -174,6 +177,7 @@ class BookServiceTest {
         verify(bookRepo).findByTitleContainingIgnoreCase("Carrie");
     }
 
+    //    Test 5
     @Test
     @DisplayName("Should get all books")
     void getAllBooks() {
@@ -190,6 +194,7 @@ class BookServiceTest {
         assertEquals("De shining", booksFound.get(2).getTitle());
     }
 
+    //    Test 6
     @Test
     @DisplayName("Should delete a book")
     void deleteBookById() {

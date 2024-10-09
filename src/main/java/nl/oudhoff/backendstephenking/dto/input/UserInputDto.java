@@ -6,7 +6,6 @@ import lombok.Data;
 import nl.oudhoff.backendstephenking.model.Role;
 import org.springframework.stereotype.Component;
 
-
 @Data
 @Component
 public class UserInputDto {

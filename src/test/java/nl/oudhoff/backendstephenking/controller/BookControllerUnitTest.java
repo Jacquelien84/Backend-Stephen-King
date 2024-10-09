@@ -22,16 +22,14 @@ import static org.mockito.ArgumentMatchers.anyLong;
 @WebMvcTest(BookController.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = true)
-public class OrderControllerUnitTest {
+public class BookControllerUnitTest {
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    JwtUtil jwtUtil;
-
-    @MockBean
     BookService bookService;
 
+    //    Test 10
     @Test
     @WithMockUser(username="testuser", roles="USER")
     void shouldRetrieveBook() throws Exception {

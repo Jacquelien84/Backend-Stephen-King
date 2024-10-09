@@ -1,6 +1,7 @@
 -- Insert into users table
 INSERT INTO users (username, email, password, role)
 VALUES ('Jacquelien', 'jdoudhoff@fictional.nl', '$2a$10$Xm6YVAv6fKzdMR4iw3.TUOozGXCrYmw5ja64rc2sOv1fw3fSmTmCS', 'ADMIN' ),
+--        ww = catseye
        ('Karel', 'koudhoff@fictional.nl', '$2a$10$hyOCFja70XJahdqtniYavuuuR160nzXLhNta17DPFNOu8lYLH0ZOS', 'USER');
 
 -- Insert into books table
