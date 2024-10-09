@@ -1,10 +1,8 @@
 package nl.oudhoff.backendstephenking.dto.input;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class BookInputDto {
 
     private Long id;
@@ -14,5 +12,4 @@ public class BookInputDto {
     private Long released;
     private String movieAdaptation;
     private String description;
-
 }

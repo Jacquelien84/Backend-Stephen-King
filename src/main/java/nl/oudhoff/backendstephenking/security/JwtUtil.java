@@ -1,4 +1,5 @@
 package nl.oudhoff.backendstephenking.security;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,13 +38,21 @@ public class JwtUtil {
     public boolean isValid(String token, UserDetails user) {
         String username = extractUsername(token);
 
+        // Voeg extra logging toe om de validatie te debuggen
+        System.out.println("Username in token: " + username);
+        System.out.println("Username in UserDetails: " + user.getUsername());
+        System.out.println("Is token expired: " + isTokenExpired(token));
+
         boolean validToken = tokenRepo
                 .findByAccessToken(token)
                 .map(t -> !t.isLoggedOut())
                 .orElse(false);
 
+        System.out.println("Is token valid in repo: " + validToken);
+
         return (username.equals(user.getUsername())) && !isTokenExpired(token) && validToken;
     }
+
 
     public boolean isValidRefreshToken(String token, User user) {
         String username = extractUsername(token);
@@ -72,9 +81,10 @@ public class JwtUtil {
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(token.replace("{", "").replace("}",""))
+                .parseClaimsJws(token)
                 .getBody();
     }
+
 
     public String generateAccessToken(User user) {
         long accessTokenExpire = 1000 * 60 * 60 * 24 * 10; // 10 day in ms;
@@ -91,9 +101,10 @@ public class JwtUtil {
         return Jwts.builder().setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expireTime * 1000))
-                .signWith(SignatureAlgorithm.HS512,
-                        SECRET_KEY.getBytes(StandardCharsets.UTF_8)).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .compact();
     }
 }
+
 

@@ -1,5 +1,6 @@
 package nl.oudhoff.backendstephenking.service;
 
+import jakarta.transaction.Transactional;
 import nl.oudhoff.backendstephenking.dto.input.BookInputDto;
 import nl.oudhoff.backendstephenking.dto.mapper.BookMapper;
 import nl.oudhoff.backendstephenking.dto.output.BookOutputDto;
@@ -11,8 +12,6 @@ import nl.oudhoff.backendstephenking.repository.FileUploadRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.core.io.Resource;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +23,8 @@ public class BookService {
     private final FileUploadRepository uploadRepository;
     private final BookcoverService bookcoverService;
 
-    private final Path fileStorageLocation = Paths.get("/uploads").toAbsolutePath().normalize();
-
     public BookService(BookRepository bookRepo, FileUploadRepository uploadRepository, BookcoverService bookcoverService) {
+
         this.bookRepo = bookRepo;
         this.uploadRepository = uploadRepository;
         this.bookcoverService = bookcoverService;
@@ -71,6 +69,7 @@ public class BookService {
         return booksOutputDtoList;
     }
 
+    @Transactional
     public void deleteBookById(long id) {
         Optional<Book> book = bookRepo.findById(id);
         if (book.isPresent()) {
@@ -96,11 +95,11 @@ public class BookService {
 
     public Resource getBookcover(long id) {
         Optional<Book> optBook = bookRepo.findById(id);
-        if(optBook .isEmpty()){
+        if (optBook.isEmpty()) {
             throw new ResourceNotFoundException("Book or bookcover not found");
         }
         Bookcover bookcover = optBook.get().getBookcover();
-        if(bookcover == null){
+        if (bookcover == null) {
             throw new ResourceNotFoundException("Bookcover not found");
         }
         return bookcoverService.downLoadFile(bookcover.getFileName());

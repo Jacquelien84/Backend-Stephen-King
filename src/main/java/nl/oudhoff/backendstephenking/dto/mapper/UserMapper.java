@@ -20,7 +20,6 @@ public class UserMapper {
         userOutputDto.setEmail(user.getEmail());
         userOutputDto.setPassword(user.getPassword());
         userOutputDto.setRole(user.getRole());
-        userOutputDto.setFavouriteBooks(user.getFavouriteBooks());
         return userOutputDto;
     }
 }

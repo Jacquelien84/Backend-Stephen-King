@@ -1,16 +1,13 @@
 package nl.oudhoff.backendstephenking.controller;
 
-import nl.oudhoff.backendstephenking.dto.mapper.UserMapper;
 import nl.oudhoff.backendstephenking.dto.output.UserOutputDto;
-import nl.oudhoff.backendstephenking.model.User;
+import nl.oudhoff.backendstephenking.exception.ResourceNotFoundException;
 import nl.oudhoff.backendstephenking.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -34,25 +31,9 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PutMapping("fav/{id}/{bookId}")
-    public ResponseEntity<UserOutputDto> addBookToFavorite(@PathVariable("id") String id, @PathVariable("bookId") Long bookId) throws Exception {
-        Optional<User> user = userService.assignBookToFavourites(id, bookId);
-        if (user.isPresent()) {
-            UserOutputDto outputDto = UserMapper.fromModelToOutputDto(user.get());
-            return ResponseEntity.ok().body(outputDto);
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to add book to favourites");
-    }
-
-    @DeleteMapping("fav/{id}/{bookId}")
-    public ResponseEntity<UserOutputDto> removeBookFromFavorite(@PathVariable("id") String id, @PathVariable("bookId") Long bookId) throws Exception {
-        Optional<User> user = userService.removeBookFromFavourites(id, bookId);
-        if (user.isPresent()) {
-            UserOutputDto outputDto = UserMapper.fromModelToOutputDto(user.get());
-            return ResponseEntity.ok().body(outputDto);
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to remove book from favourites");
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable String username) throws ResourceNotFoundException {
+        userService.deleteUser(username);
+        return ResponseEntity.status(HttpStatus.OK).body("User with username " + username + " has been removed.");
     }
 }

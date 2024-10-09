@@ -40,11 +40,9 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-
     public AuthenticationResponse register(UserInputDto request) {
         User user = UserMapper.fromInputDtoToModel(request);
 
-        // check if user already exist. if exist than authenticate the user
         if (userRepo.findByUsername(user.getUsername()).isPresent()) {
             return new AuthenticationResponse(null, null, "User already exist");
         }
@@ -123,16 +121,14 @@ public class AuthenticationService {
 
         String token = authHeader.substring(7);
 
-        // extract username from token
         String username = jwtUtil.extractUsername(token);
 
-        // check if the user exist in database
         User user = userRepo.findByUsername(username)
                 .orElseThrow(()->new RuntimeException("No user found"));
 
-        // check if the token is valid
+
         if(jwtUtil.isValidRefreshToken(token, user)) {
-            // generate access token
+
             String accessToken = jwtUtil.generateAccessToken(user);
             String refreshToken = jwtUtil.generateRefreshToken(user);
 
