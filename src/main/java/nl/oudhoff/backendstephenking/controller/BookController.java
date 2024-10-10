@@ -32,11 +32,9 @@ public class BookController {
     private final BookService bookService;
     private final BookcoverService bookcoverService;
 
-
     public BookController(BookService bookService, BookcoverService bookcoverService) {
         this.bookService = bookService;
         this.bookcoverService = bookcoverService;
-
     }
 
     @PostMapping
