@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class BookOutputDto {
 
+    public Object getId;
     private Long id;
     private String title;
     private String author;

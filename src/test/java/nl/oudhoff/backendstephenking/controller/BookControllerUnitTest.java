@@ -2,7 +2,6 @@ package nl.oudhoff.backendstephenking.controller;
 
 import nl.oudhoff.backendstephenking.dto.output.BookOutputDto;
 import nl.oudhoff.backendstephenking.service.BookService;
-import nl.oudhoff.backendstephenking.security.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
